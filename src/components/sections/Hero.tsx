@@ -8,28 +8,35 @@ import gsap from 'gsap';
 
 
 export const Hero = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
+  const heroRef = useRef(null);
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const imageRef = useRef(null);
   
   useEffect(() => {
     const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
     
     tl.fromTo(
+      imageRef.current,
+      { opacity: 0, x: -30 },
+      { opacity: 1, x: 0, duration: 0.8 }
+    )
+    .fromTo(
       titleRef.current,
-      { opacity: 0, y: 20 }, // Reduced y value
-      { opacity: 1, y: 0, duration: 0.8 } // Reduced duration
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8 },
+      '-=0.5'
     )
     .fromTo(
       descriptionRef.current,
-      { opacity: 0, y: 15 }, // Reduced y value
-      { opacity: 1, y: 0, duration: 0.6 }, // Reduced duration
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.6 },
       '-=0.3'
     )
     .fromTo(
       '.hero-button',
-      { opacity: 0, y: 10 }, // Reduced y value
-      { opacity: 1, y: 0, duration: 0.4, stagger: 0.1 }, // Reduced duration
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.4, stagger: 0.1 },
       '-=0.2'
     );
     
@@ -37,13 +44,25 @@ export const Hero = () => {
       tl.kill();
     };
   }, []);
+  
   return (
     <section ref={heroRef} className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
       {/* Particles background */}
       
-      
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-background" />
+      
+      {/* Left Image */}
+      <div 
+        ref={imageRef} 
+        className="absolute left-4 md:left-12 lg:left-24 top-4/10 transform -translate-y-1/2 z-10 hidden md:block"
+      >
+        <img 
+          src="/images/ch1.svg" 
+          alt="Developer Profile" 
+          className="w-68 lg:w-84 xl:w-80 object-contain"
+        />
+      </div>
       
       {/* Content */}
       <div className="container relative z-10 px-4 md:px-6 mx-auto flex flex-col items-center justify-center text-center max-w-3xl">
@@ -59,14 +78,14 @@ export const Hero = () => {
         
         <h1 
           ref={titleRef}
-          className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+          className="text-4xl md:text-7xl lg:text-5xl font-bold mb-6"
         >
-          Hi, I'm <span className="gradient-text">Your Name</span>
+          Hi, I'm <span className="gradient-text">Supun Seneviratne</span>
         </h1>
         
         <p 
           ref={descriptionRef}
-          className="text-xl md:text-2xl text-gray-300 mb-10"
+          className="text-xl md:text-1xl text-gray-300 mb-10 font-medium"
         >
           I create immersive digital experiences with cutting-edge technology.
         </p>
