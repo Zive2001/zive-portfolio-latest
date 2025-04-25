@@ -58,12 +58,12 @@ export const Skills = () => {
     { name: 'TypeScript', icon: <SiTypescript className="w-6 h-6" /> },
     { name: 'Next.js', icon: <SiNextdotjs className="w-6 h-6" /> },
     { name: 'Tailwind', icon: <SiTailwindcss className="w-6 h-6" /> },
-    { name: 'GSAP', icon: <SiGreensock className="w-6 h-6" /> },
+    { name: 'Node.js', icon: <FaNodeJs className="w-6 h-6" /> },
     { name: 'Framer Motion', icon: <SiFramer className="w-6 h-6" /> },
     { name: 'Three.js', icon: <SiThreedotjs className="w-6 h-6" /> },
     { name: 'Figma', icon: <FaFigma className="w-6 h-6" /> },
-    { name: 'Node.js', icon: <FaNodeJs className="w-6 h-6" /> },
-    { name: 'Git', icon: <FaGitAlt className="w-6 h-6" /> }
+    { name: 'Git', icon: <FaGitAlt className="w-6 h-6" /> },
+    { name: 'GSAP', icon: <SiGreensock className="w-6 h-6" /> }
   ];
   
   // Skill categories with items
@@ -205,7 +205,7 @@ export const Skills = () => {
                       {techLogos.slice(0, 5).map((tech, index) => (
                         <motion.div
                           key={tech.name}
-                          className="absolute rounded-full bg-gradient-to-br from-blue-800/90 to-purple-800/90 backdrop-blur-sm border border-blue-400/30 p-2 flex items-center justify-center shadow-lg orbit-icon group"
+                          className="absolute rounded-full bg-gradient-to-br to-[#F46F16] from-[#B1B548] backdrop-blur-sm border border-[#B1B548] p-2 flex items-center justify-center shadow-lg orbit-icon group"
                           initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ 
                             opacity: 1,
@@ -215,7 +215,7 @@ export const Skills = () => {
                             y: Math.sin(index * (Math.PI * 2 / 5)) * 120,
                           }}
                           transition={{ 
-                            duration: 0.8, 
+                            duration: 0.5, 
                             delay: index * 0.2,
                             ease: "easeOut"
                           }}
@@ -229,12 +229,12 @@ export const Skills = () => {
                             height: '48px',
                           }}
                         >
-                          <div className="text-blue-300 hover:text-blue-100 transition-colors duration-300">
+                          <div className="text-gray-900 hover:text-gray-800 transition-colors duration-300">
                             {tech.icon}
                           </div>
                           
                           {/* Tooltip that appears on hover */}
-                          <div className="absolute opacity-0 group-hover:opacity-100 bg-blue-900/90 text-white text-xs rounded px-2 py-1 pointer-events-none transition-opacity duration-300 whitespace-nowrap bottom-full mb-2">
+                          <div className="absolute opacity-0 group-hover:opacity-100 bg-gray-900/90 text-white text-xs rounded px-2 py-1 pointer-events-none transition-opacity duration-300 whitespace-nowrap bottom-full mb-2">
                             {tech.name}
                           </div>
                         </motion.div>
@@ -265,7 +265,7 @@ export const Skills = () => {
                     key={category.name} 
                     className="bg-blue-900/20 border border-blue-500/20 rounded-xl p-5 backdrop-blur-sm hover:bg-blue-900/30 transition-colors duration-300"
                   >
-                    <h3 className="text-xl font-semibold text-blue-300 mb-4">{category.name}</h3>
+                    <h3 className="text-xl font-semibold text-[#f0ebd8] mb-4">{category.name}</h3>
                     
                     <div className="space-y-4">
                       {category.skills.map((skill, index) => {
@@ -284,9 +284,9 @@ export const Skills = () => {
                             </div>
                             
                             {/* Skill progress bar */}
-                            <div className="relative h-1.5 w-full bg-blue-900/40 rounded-full overflow-hidden">
+                            <div className="relative h-1.5 w-full bg-[#8d99ae] rounded-full overflow-hidden">
                               <div 
-                                className="skill-progress-bar absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
+                                className="skill-progress-bar absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-[#003566] rounded-full"
                                 data-index={globalIndex}
                                 style={{maxWidth: '100%'}}
                               />
@@ -307,22 +307,40 @@ export const Skills = () => {
           <h3 className="text-2xl font-semibold text-center mb-10">Tools & Technologies</h3>
           
           <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 max-w-4xl mx-auto">
-            {techLogos.map((tech, index) => (
-              <motion.div
-                key={tech.name}
-                className="group"
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <div className="w-16 h-16 bg-blue-900/20 rounded-xl flex items-center justify-center mb-2 border border-blue-500/20 group-hover:bg-blue-800/30 group-hover:border-blue-500/40 transition-all duration-300">
-                  <div className="text-blue-400 group-hover:text-blue-300 transition-colors duration-300">
-                    {tech.icon}
-                  </div>
-                </div>
-                <span className="text-sm text-gray-300 text-center block">{tech.name}</span>
-              </motion.div>
-            ))}
+          {techLogos.map((tech, index) => (
+  <motion.div
+    key={tech.name}
+    className="group flex flex-col items-center"
+    initial={{ opacity: 0, y: 20 }}
+    animate={isInView ? { opacity: 1, y: 0 } : {}}
+    transition={{ duration: 0.5, delay: index * 0.1 }}
+  >
+    <motion.div 
+      className="relative flex items-center justify-center mb-3"
+      whileHover={{ scale: 1.1 }}
+      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+    >
+      {/* Subtle glow effect behind the icon */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
+      {/* The actual icon with increased size */}
+      <div className="text-[#e5e5e5] group-hover:text-blue-300 transition-colors duration-300 transform z-10">
+        {React.cloneElement(tech.icon, { 
+          className: "w-10 h-10 md:w-12 md:h-12" 
+        })}
+      </div>
+    </motion.div>
+    
+    {/* Tech name with fade-in animation */}
+    <motion.span 
+      className="text-sm text-gray-400 group-hover:text-blue-300 font-medium text-center block transition-colors duration-300"
+      initial={{ opacity: 0.7 }}
+      whileHover={{ opacity: 1 }}
+    >
+      {tech.name}
+    </motion.span>
+  </motion.div>
+))}
           </div>
         </ScrollAnimation>
       </div>

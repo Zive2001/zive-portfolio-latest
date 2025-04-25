@@ -1,12 +1,13 @@
 "use client";
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ScrollAnimation } from '../animations/ScrollAnimations';
 import { Button } from '../ui/Button';
 import { FileText, Github, Linkedin, Twitter } from 'lucide-react';
 
 export const About = () => {
   const sectionRef = useRef(null);
+  const timelineRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"]
@@ -14,6 +15,37 @@ export const About = () => {
   
   const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+  
+  // Create a separate scroll progress for the timeline section
+  const { scrollYProgress: timelineProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start center", "end center"]
+  });
+  
+  // Track active timeline item
+  const [activeIndex, setActiveIndex] = useState(0);
+  
+  // Update active item based on scroll position
+  useEffect(() => {
+    const unsubscribe = timelineProgress.onChange(value => {
+      // Map the 0-1 progress to our timeline items
+      // For 3 items, we'd want to split into 3 sections: 0-0.33, 0.33-0.66, 0.66-1
+      const itemCount = timelineItems.length;
+      const itemThreshold = 1 / itemCount;
+      
+      // Calculate which item should be active based on current scroll progress
+      const newActiveIndex = Math.min(
+        Math.floor(value / itemThreshold),
+        itemCount - 1
+      );
+      
+      if (newActiveIndex !== activeIndex) {
+        setActiveIndex(newActiveIndex);
+      }
+    });
+    
+    return () => unsubscribe();
+  }, [timelineProgress, activeIndex]);
   
   const timelineItems = [
     {
@@ -140,47 +172,148 @@ export const About = () => {
           </div>
         </div>
         
-        {/* Timeline section - now full width below the about content */}
-        <div className="mt-16 pt-8 border-t border-blue-500/20">
+        {/* Timeline section - now with dynamic scroll animation */}
+        <div 
+          ref={timelineRef}
+          className="mt-16 pt-8 border-t border-blue-500/20"
+        >
           <ScrollAnimation animation="fade-up">
-            <h3 className="text-2xl font-semibold mb-8 text-center">My Journey</h3>
+            <h3 className="text-2xl font-semibold mb-12 text-center">My Journey</h3>
             
-            <div className="relative max-w-3xl mx-auto">
-              {/* Timeline line */}
-              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-blue-500/30 transform -translate-x-1/2" />
+            <div className="relative max-w-3xl mx-auto min-h-[600px]">
+              {/* Timeline line with progress animation */}
+              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-blue-500/10 transform -translate-x-1/2">
+                {/* Animated progress overlay */}
+                <motion.div 
+                  className="absolute top-0 left-0 right-0 bg-gradient-to-b from-blue-500 via-purple-500 to-pink-500"
+                  style={{ 
+                    height: useTransform(
+                      timelineProgress,
+                      [0, 1],
+                      ["0%", "100%"]
+                    )
+                  }}
+                />
+              </div>
               
-              {/* Timeline items */}
-              <div className="space-y-12">
+              {/* Timeline items - now with animated nodes */}
+              <div className="space-y-32">
                 {timelineItems.map((item, index) => (
-                  <ScrollAnimation
+                  <div 
                     key={index}
-                    animation={index % 2 === 0 ? "fade-right" : "fade-left"}
-                    delay={index * 0.1}
-                    className="relative"
+                    className={`relative ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}
                   >
                     <div className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center`}>
-                      {/* Timeline dot */}
-                      <div className="absolute left-1/2 top-0 w-4 h-4 rounded-full bg-blue-500 transform -translate-x-1/2 z-10" />
+                      {/* Animated timeline node */}
+                      <motion.div 
+                        className={`absolute left-1/2 top-0 w-6 h-6 rounded-full border-2 border-blue-500 bg-blue-900 transform -translate-x-1/2 z-10 flex items-center justify-center transition-all duration-500 ease-out ${index <= activeIndex ? 'border-purple-400' : ''}`}
+                        animate={{
+                          scale: index === activeIndex ? 1.3 : 1,
+                          backgroundColor: index <= activeIndex 
+                            ? 'rgba(139, 92, 246, 0.5)' // purple-500 with opacity
+                            : 'rgba(30, 64, 175, 0.3)', // blue-900 with opacity
+                          borderColor: index <= activeIndex 
+                            ? '#a78bfa' // purple-400
+                            : '#3b82f6', // blue-500
+                          boxShadow: index === activeIndex 
+                            ? '0 0 15px 5px rgba(139, 92, 246, 0.3)' 
+                            : 'none'
+                        }}
+                      >
+                        {/* Inner dot indicator */}
+                        <motion.div 
+                          className="w-2 h-2 rounded-full"
+                          animate={{
+                            backgroundColor: index <= activeIndex 
+                              ? '#d8b4fe' // purple-300
+                              : '#93c5fd' // blue-300
+                          }}
+                        />
+                      </motion.div>
                       
                       {/* Year tag - positioned differently based on even/odd */}
-                      <div className={`mb-4 md:mb-0 md:w-1/2 ${index % 2 === 0 ? 'md:text-right md:pr-8' : 'md:text-left md:pl-8'}`}>
-                        <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-blue-500/20 text-blue-300">
+                      <div className={`mb-8 md:mb-0 md:w-1/2 ${index % 2 === 0 ? 'md:text-right md:pr-8' : 'md:text-left md:pl-8'}`}>
+                        <motion.span 
+                          className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-blue-500/20 text-blue-300"
+                          animate={{
+                            backgroundColor: index <= activeIndex 
+                              ? 'rgba(139, 92, 246, 0.2)' // purple-500 with opacity
+                              : 'rgba(59, 130, 246, 0.2)', // blue-500 with opacity
+                            color: index <= activeIndex 
+                              ? '#c4b5fd' // purple-300
+                              : '#93c5fd' // blue-300
+                          }}
+                        >
                           {item.year}
-                        </span>
+                        </motion.span>
                       </div>
                       
-                      {/* Content - positioned differently based on even/odd */}
+                      {/* Content card - with animation based on active state */}
                       <div className={`md:w-1/2 ${index % 2 === 0 ? 'md:pl-8' : 'md:pr-8'}`}>
-                        <div className="bg-blue-900/20 border border-blue-500/20 rounded-lg p-6 hover:bg-blue-800/20 transition-colors duration-300">
+                        <motion.div 
+                          className="bg-blue-900/20 border border-blue-500/20 rounded-lg p-6 transition-all duration-300"
+                          initial={{ opacity: 0.7, y: 20 }}
+                          animate={{
+                            opacity: index === activeIndex ? 1 : 0.7,
+                            y: index === activeIndex ? 0 : 20,
+                            backgroundColor: index <= activeIndex 
+                              ? 'rgba(91, 33, 182, 0.2)' // purple-800 with opacity
+                              : 'rgba(30, 58, 138, 0.2)', // blue-900 with opacity
+                            borderColor: index <= activeIndex 
+                              ? 'rgba(139, 92, 246, 0.2)' // purple-500 with opacity
+                              : 'rgba(59, 130, 246, 0.2)', // blue-500 with opacity
+                            scale: index === activeIndex ? 1.05 : 1
+                          }}
+                          transition={{ 
+                            duration: 0.5,
+                            ease: [0.4, 0.0, 0.2, 1]
+                          }}
+                        >
                           <h4 className="text-xl font-semibold mb-1">{item.title}</h4>
-                          <p className="text-blue-300 mb-3">{item.company}</p>
+                          <p className={`mb-3 transition-colors duration-300 ${
+                            index <= activeIndex ? 'text-purple-300' : 'text-blue-300'
+                          }`}>{item.company}</p>
                           <p className="text-gray-400">{item.description}</p>
-                        </div>
+                        </motion.div>
                       </div>
                     </div>
-                  </ScrollAnimation>
+                  </div>
                 ))}
               </div>
+              
+              {/* Fancy scrolling indicator */}
+              <motion.div 
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-50 pointer-events-none"
+                animate={{ 
+                  opacity: activeIndex === timelineItems.length - 1 ? 0 : [0.5, 0.8, 0.5],
+                  y: activeIndex === timelineItems.length - 1 ? 20 : [0, 10, 0]
+                }}
+                transition={{ 
+                  repeat: Infinity, 
+                  duration: 2,
+                  ease: "easeInOut"
+                }}
+                style={{
+                  display: activeIndex === timelineItems.length - 1 ? 'none' : 'flex'
+                }}
+              >
+                <p className="text-xs text-blue-300 mb-2">Scroll to continue the journey</p>
+                <svg width="20" height="30" viewBox="0 0 20 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="1" y="1" width="18" height="28" rx="9" stroke="#3B82F6" strokeWidth="2"/>
+                  <motion.circle 
+                    cx="10" 
+                    cy="10" 
+                    r="4" 
+                    fill="#3B82F6"
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ 
+                      repeat: Infinity, 
+                      duration: 5,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </svg>
+              </motion.div>
             </div>
           </ScrollAnimation>
         </div>

@@ -56,7 +56,7 @@ const Button: React.FC<ButtonProps> = ({
       {...(props as React.ComponentProps<typeof motion.button>)}
     >
       {/* Background animation */}
-      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+      <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-[#10A4EA] to-[#EEBE49] opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
       
       {/* Content with icon */}
       <span className="relative flex items-center justify-center gap-2">

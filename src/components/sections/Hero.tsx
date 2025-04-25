@@ -44,6 +44,40 @@ export const Hero = () => {
       tl.kill();
     };
   }, []);
+
+  // Custom styles for buttons
+  const primaryButtonStyle = {
+    backgroundColor: '#10A4EA',
+    transition: 'background-color 0.3s ease',
+  };
+
+  const secondaryButtonStyle = {
+    backgroundColor: '#F46F16',
+    color: '#1a202c',
+    borderColor: '#F46F16',
+    transition: 'background-color 0.3s ease',
+  };
+
+  // Hover event handlers
+  const handlePrimaryMouseEnter = (e) => {
+    e.currentTarget.style.backgroundColor = '#EEBE49';
+    e.currentTarget.style.color = '#1a202c';
+  };
+
+  const handlePrimaryMouseLeave = (e) => {
+    e.currentTarget.style.backgroundColor = '#10A4EA';
+    e.currentTarget.style.color = 'white';
+  };
+
+  const handleSecondaryMouseEnter = (e) => {
+    e.currentTarget.style.backgroundColor = '#10A4EA';
+    e.currentTarget.style.color = 'white';
+  };
+
+  const handleSecondaryMouseLeave = (e) => {
+    e.currentTarget.style.backgroundColor = '#EEBE49';
+    e.currentTarget.style.color = '#1a202c';
+  };
   
   return (
     <section ref={heroRef} className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
@@ -57,6 +91,9 @@ export const Hero = () => {
         ref={imageRef} 
         className="absolute left-4 md:left-12 lg:left-24 top-4/10 transform -translate-y-1/2 z-10 hidden md:block"
       >
+        {/* Decorative elements */}
+        <div className="absolute -top-6 -left-6 w-28 h-28 bg-blue-500/10 rounded-lg transform rotate-6"></div>
+                <div className="absolute -bottom-6 -right-6 w-28 h-28 bg-purple-500/10 rounded-lg transform -rotate-6"></div>
         <img 
           src="/images/ch1.svg" 
           alt="Developer Profile" 
@@ -95,6 +132,9 @@ export const Hero = () => {
             variant="primary" 
             size="lg" 
             className="hero-button"
+            style={primaryButtonStyle}
+            onMouseEnter={handlePrimaryMouseEnter}
+            onMouseLeave={handlePrimaryMouseLeave}
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
           >
             View My Work
@@ -103,6 +143,9 @@ export const Hero = () => {
             variant="outline" 
             size="lg" 
             className="hero-button"
+            style={secondaryButtonStyle}
+            onMouseEnter={handleSecondaryMouseEnter}
+            onMouseLeave={handleSecondaryMouseLeave}
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
           >
             Contact Me
