@@ -4,6 +4,15 @@ import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { ScrollAnimation } from '../animations/ScrollAnimations';
 import { Button } from '../ui/Button';
 import { FileText, Github, Linkedin, Twitter } from 'lucide-react';
+// Import Poppins font
+import { Poppins } from 'next/font/google';
+
+// Initialize the font with different weights
+const poppins = Poppins({ 
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
+});
 
 export const About = () => {
   const sectionRef = useRef(null);
@@ -72,7 +81,7 @@ export const About = () => {
     <section 
       id="about" 
       ref={sectionRef} 
-      className="relative py-24 md:py-32 bg-gradient-to-b from-background to-blue-950/20 overflow-hidden"
+      className={`${poppins.className} relative py-24 md:py-32 bg-gradient-to-b from-background to-blue-950/20 overflow-hidden`}
     >
       {/* Background decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
@@ -146,15 +155,15 @@ export const About = () => {
             </motion.div>
           </div>
           
-          {/* Right column: Content */}
+          {/* Right column: Content with Poppins font */}
           <div className="lg:col-span-8 order-1 lg:order-2">
             <ScrollAnimation animation="fade-up">
               <div className="max-w-2xl mx-auto lg:mx-0">
-                <p className="text-lg text-gray-300 mb-6">
+                <p className="text-base md:text-[17px] text-gray-300 mb-6 font-medium leading-relaxed">
                   I'm a creative developer and designer with a passion for building immersive digital experiences. With a background in both design and development, I bring a unique perspective to every project.
                 </p>
                 
-                <p className="text-lg text-gray-300 mb-8">
+                <p className="text-base md:text-[17px] text-gray-300 mb-8 font-medium leading-relaxed">
                   My journey started with a fascination for how technology and design intersect to create meaningful experiences. Today, I focus on crafting intuitive, accessible, and visually stunning interfaces that push the boundaries of what's possible on the web.
                 </p>
                 
@@ -270,10 +279,10 @@ export const About = () => {
                           }}
                         >
                           <h4 className="text-xl font-semibold mb-1">{item.title}</h4>
-                          <p className={`mb-3 transition-colors duration-300 ${
+                          <p className="mb-3 transition-colors duration-300 font-medium text-sm ${
                             index <= activeIndex ? 'text-purple-300' : 'text-blue-300'
-                          }`}>{item.company}</p>
-                          <p className="text-gray-400">{item.description}</p>
+                          }">{item.company}</p>
+                          <p className="text-gray-400 text-sm font-light">{item.description}</p>
                         </motion.div>
                       </div>
                     </div>
