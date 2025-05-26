@@ -6,7 +6,6 @@ import { Button } from '../ui/Button';
 import { ChevronDown } from 'lucide-react';
 import gsap from 'gsap';
 
-
 export const Hero = () => {
   const heroRef = useRef(null);
   const titleRef = useRef(null);
@@ -20,12 +19,6 @@ export const Hero = () => {
       imageRef.current,
       { opacity: 0, x: -30 },
       { opacity: 1, x: 0, duration: 0.8 }
-    )
-    .fromTo(
-      titleRef.current,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.8 },
-      '-=0.5'
     )
     .fromTo(
       descriptionRef.current,
@@ -45,39 +38,101 @@ export const Hero = () => {
     };
   }, []);
 
-  // Custom styles for buttons
+  // Light beam animation for each letter - matching layout theme
+  const letterAnimation = {
+    initial: { 
+      background: 'linear-gradient(135deg, #312e81 0%, #3b82f6 25%, #8b5cf6 50%, #a855f7 75%, #c084fc 100%)',
+      backgroundClip: 'text',
+      WebkitBackgroundClip: 'text',
+      color: 'transparent',
+      filter: 'brightness(0.8)',
+      textShadow: 'none'
+    },
+    animate: (i) => ({
+      filter: ['brightness(0.8)', 'brightness(1.6)', 'brightness(0.8)'],
+      textShadow: [
+        'none',
+        '0 0 25px rgba(139, 92, 246, 0.9), 0 0 50px rgba(59, 130, 246, 0.5), 0 0 75px rgba(168, 85, 247, 0.3)',
+        'none'
+      ],
+      transition: {
+        delay: i * 0.08,
+        duration: 0.7,
+        repeat: Infinity,
+        repeatDelay: 8,
+        ease: 'easeInOut',
+      },
+    }),
+  };
+
+  const dotsAnimation = {
+    initial: { 
+      opacity: 0, 
+      y: 0,
+      background: 'linear-gradient(135deg, #312e81 0%, #8b5cf6 50%, #a855f7 100%)',
+      backgroundClip: 'text',
+      WebkitBackgroundClip: 'text',
+      color: 'transparent'
+    },
+    animate: {
+      opacity: 1,
+      y: [0, -8, 0],
+      filter: ['brightness(0.8)', 'brightness(1.4)', 'brightness(0.8)'],
+      transition: {
+        delay: 2.5,
+        duration: 2.5,
+        repeat: Infinity,
+        repeatDelay: 6,
+        ease: 'easeInOut',
+      },
+    },
+  };
+
+  // Custom styles for buttons matching layout theme
   const primaryButtonStyle = {
-    backgroundColor: '#10A4EA',
-    transition: 'background-color 0.3s ease',
+    background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 4px 20px rgba(139, 92, 246, 0.4)',
+    border: 'none',
   };
 
   const secondaryButtonStyle = {
-    backgroundColor: '#F46F16',
-    color: '#1a202c',
-    borderColor: '#F46F16',
-    transition: 'background-color 0.3s ease',
+    background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+    color: '#a855f7',
+    borderColor: '#8b5cf6',
+    borderWidth: '2px',
+    transition: 'all 0.3s ease',
+    backdropFilter: 'blur(10px)',
   };
 
-  // Hover event handlers
+  // Hover event handlers matching layout theme
   const handlePrimaryMouseEnter = (e) => {
-    e.currentTarget.style.backgroundColor = '#EEBE49';
-    e.currentTarget.style.color = '#1a202c';
+    e.currentTarget.style.background = 'linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%)';
+    e.currentTarget.style.transform = 'translateY(-3px)';
+    e.currentTarget.style.boxShadow = '0 8px 30px rgba(139, 92, 246, 0.6)';
   };
 
   const handlePrimaryMouseLeave = (e) => {
-    e.currentTarget.style.backgroundColor = '#10A4EA';
-    e.currentTarget.style.color = 'white';
+    e.currentTarget.style.background = 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)';
+    e.currentTarget.style.transform = 'translateY(0px)';
+    e.currentTarget.style.boxShadow = '0 4px 20px rgba(139, 92, 246, 0.4)';
   };
 
   const handleSecondaryMouseEnter = (e) => {
-    e.currentTarget.style.backgroundColor = '#10A4EA';
+    e.currentTarget.style.background = 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 100%)';
     e.currentTarget.style.color = 'white';
+    e.currentTarget.style.transform = 'translateY(-3px)';
+    e.currentTarget.style.boxShadow = '0 8px 30px rgba(168, 85, 247, 0.4)';
   };
 
   const handleSecondaryMouseLeave = (e) => {
-    e.currentTarget.style.backgroundColor = '#EEBE49';
-    e.currentTarget.style.color = '#1a202c';
+    e.currentTarget.style.background = 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)';
+    e.currentTarget.style.color = '#a855f7';
+    e.currentTarget.style.transform = 'translateY(0px)';
+    e.currentTarget.style.boxShadow = 'none';
   };
+
+  const nameText = "Hi, I'm Supun Seneviratne";
   
   return (
     <section ref={heroRef} className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
@@ -93,7 +148,7 @@ export const Hero = () => {
       >
         {/* Decorative elements */}
         <div className="absolute -top-6 -left-6 w-28 h-28 bg-blue-500/10 rounded-lg transform rotate-6"></div>
-                <div className="absolute -bottom-6 -right-6 w-28 h-28 bg-purple-500/10 rounded-lg transform -rotate-6"></div>
+        <div className="absolute -bottom-6 -right-6 w-28 h-28 bg-purple-500/10 rounded-lg transform -rotate-6"></div>
         <img 
           src="/images/ch1.svg" 
           alt="Developer Profile" 
@@ -113,12 +168,71 @@ export const Hero = () => {
           <span className="text-sm font-medium text-blue-200">Creative Developer</span>
         </motion.div>
         
-        <h1 
+        <motion.h1 
           ref={titleRef}
-          className="text-4xl md:text-7xl lg:text-5xl font-bold mb-6"
+          className="text-4xl md:text-7xl lg:text-5xl font-bold mb-6 flex flex-wrap items-center justify-center"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          style={{
+            background: 'linear-gradient(135deg, #312e81 0%, #3b82f6 25%, #8b5cf6 50%, #a855f7 75%, #c084fc 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+          }}
         >
-          Hi, I'm <span className="gradient-text">Supun Seneviratne</span>
-        </h1>
+          {nameText.split("").map((char, index) => (
+            <motion.span
+              key={index}
+              custom={index}
+              initial="initial"
+              animate="animate"
+              variants={letterAnimation}
+              className="inline-block"
+              style={{
+                background: 'linear-gradient(135deg, #312e81 0%, #3b82f6 25%, #8b5cf6 50%, #a855f7 75%, #c084fc 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >
+              {char === " " ? "\u00A0" : char} 
+            </motion.span>
+          ))}
+          <motion.span
+            className="ml-2 flex"
+            initial="initial"
+            animate="animate"
+            variants={dotsAnimation}
+          >
+            <span 
+              className="inline-block"
+              style={{
+                background: 'linear-gradient(135deg, #312e81 0%, #8b5cf6 50%, #a855f7 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >.</span>
+            <span 
+              className="inline-block"
+              style={{
+                background: 'linear-gradient(135deg, #312e81 0%, #8b5cf6 50%, #a855f7 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >.</span>
+            <span 
+              className="inline-block"
+              style={{
+                background: 'linear-gradient(135deg, #312e81 0%, #8b5cf6 50%, #a855f7 100%)',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+              }}
+            >.</span>
+          </motion.span>
+        </motion.h1>
         
         <p 
           ref={descriptionRef}
