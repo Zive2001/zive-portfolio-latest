@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ScrollAnimation } from '../animations/ScrollAnimations';
+import LaserFlow from '../animations/LaserFlow';
 import gsap from 'gsap';
 
 export const Creative = () => {
@@ -69,7 +70,44 @@ export const Creative = () => {
             </p>
           </div>
         </ScrollAnimation>
-        
+
+        {/* LaserFlow Background Effect */}
+        <div className="relative mb-16" style={{ height: '500px', position: 'relative', overflow: 'hidden' }}>
+          <LaserFlow
+            horizontalBeamOffset={0.1}
+            verticalBeamOffset={0.0}
+            color="#10A4EA"
+            wispDensity={1.2}
+            flowStrength={0.8}
+            fogIntensity={0.4}
+          />
+
+          <div style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '86%',
+            height: '60%',
+            backgroundColor: 'rgba(6, 0, 16, 0.8)',
+            borderRadius: '20px',
+            border: '2px solid #10A4EA',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            color: 'white',
+            fontSize: '2rem',
+            zIndex: 6,
+            backdropFilter: 'blur(10px)',
+          }}>
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Interactive Experience
+            </h3>
+            <p className="text-blue-200 text-lg">Powered by Advanced Shaders & WebGL</p>
+          </div>
+        </div>
+
         {/* Gallery */}
         <div className="overflow-hidden">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">

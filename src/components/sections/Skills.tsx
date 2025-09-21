@@ -3,6 +3,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { ScrollAnimation } from '../animations/ScrollAnimations';
+import { InfiniteLogoCarousel } from '../animations/InfiniteLogoCarousel';
 import gsap from 'gsap';
 import Image from 'next/image';
 import { 
@@ -302,46 +303,24 @@ export const Skills = () => {
           </div>
         </div>
         
-        {/* Tool logos section */}
+        {/* Technology Stack Infinite Slider */}
         <ScrollAnimation animation="fade-up" className="mt-24">
           <h3 className="text-2xl font-semibold text-center mb-10">Tools & Technologies</h3>
-          
-          <div className="flex flex-wrap items-center justify-center gap-6 md:gap-10 max-w-4xl mx-auto">
-          {techLogos.map((tech, index) => (
-  <motion.div
-    key={tech.name}
-    className="group flex flex-col items-center"
-    initial={{ opacity: 0, y: 20 }}
-    animate={isInView ? { opacity: 1, y: 0 } : {}}
-    transition={{ duration: 0.5, delay: index * 0.1 }}
-  >
-    <motion.div 
-      className="relative flex items-center justify-center mb-3"
-      whileHover={{ scale: 1.1 }}
-      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-    >
-      {/* Subtle glow effect behind the icon */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      
-      {/* The actual icon with increased size */}
-      <div className="text-[#e5e5e5] group-hover:text-blue-300 transition-colors duration-300 transform z-10">
-        {React.cloneElement(tech.icon, { 
-          className: "w-10 h-10 md:w-12 md:h-12" 
-        })}
-      </div>
-    </motion.div>
-    
-    {/* Tech name with fade-in animation */}
-    <motion.span 
-      className="text-sm text-gray-400 group-hover:text-blue-300 font-medium text-center block transition-colors duration-300"
-      initial={{ opacity: 0.7 }}
-      whileHover={{ opacity: 1 }}
-    >
-      {tech.name}
-    </motion.span>
-  </motion.div>
-))}
-          </div>
+
+          <InfiniteLogoCarousel duration={25} pauseOnHover={true}>
+            {techLogos.map((tech) => (
+              <div key={tech.name} className="flex flex-col items-center justify-center p-6 bg-gradient-to-br from-blue-900/20 to-purple-900/20 border border-blue-500/20 rounded-xl backdrop-blur-sm hover:bg-blue-900/30 transition-all duration-300 group h-32 w-44">
+                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                  {React.cloneElement(tech.icon, {
+                    className: "w-8 h-8 text-blue-300 group-hover:text-blue-200"
+                  })}
+                </div>
+                <span className="text-sm font-medium text-gray-300 group-hover:text-blue-200 transition-colors duration-300 text-center">
+                  {tech.name}
+                </span>
+              </div>
+            ))}
+          </InfiniteLogoCarousel>
         </ScrollAnimation>
       </div>
     </section>
